@@ -9,4 +9,6 @@
     <string name="sign_up">Sign up</string>
     <string name="already_have_an_account_log_in">Already have an account? <b> Log in</b> </string>
     <string name="join_whatsapp_today">Join WhatsApp today</string>
+    <string name="type_something_here">Type something here...</string>
+    <string name="send">Send</string>
 </resources>

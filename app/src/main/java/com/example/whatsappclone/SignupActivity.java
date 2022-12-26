@@ -53,6 +53,11 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         });
 
         txtLoginActivity.setOnClickListener(SignupActivity.this);
+
+      /*  if(ParseUser.getCurrentUser() != null){
+            ParseUser.getCurrentUser().logOut();
+
+        }*/
     }
 
     @Override
@@ -72,7 +77,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                             FancyToast.LENGTH_SHORT, FancyToast.ERROR,
                             false).show();
                 }else{
-                    ParseUser parseUser = new ParseUser();
+                    final ParseUser parseUser = new ParseUser();
                     parseUser.setEmail(edtSignupEmail.getText().toString());
                     parseUser.setUsername(edtSignupUsername.getText().toString());
                     parseUser.setPassword(edtSignupPassword.getText().toString());
@@ -92,11 +97,14 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                                 edtSignupEmail.setText("");
                                 edtSignupUsername.setText("");
                                 edtSignupPassword.setText("");
+                                transitionToWhatsAppUsersActivity();
+
                             }else{
                                 FancyToast.makeText(SignupActivity.this,
                                         "there was an error " + e.getMessage(),
                                         FancyToast.LENGTH_SHORT, FancyToast.ERROR,
                                         false).show();
+
                             }
                             progressDialog.dismiss();
                         }
@@ -109,11 +117,19 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 break;
         }
     }
-    public void hideKeyboard(View view){
+    private void hideKeyboard(View view){
 
         InputMethodManager inputMethodManager = (InputMethodManager)
                 getSystemService(INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(),0);
 
     }
+
+    private void transitionToWhatsAppUsersActivity(){
+        Intent intent = new Intent(SignupActivity.this, WhatsAppUsersActivity.class);
+        startActivity(intent);
+
+    }
+
+
 }

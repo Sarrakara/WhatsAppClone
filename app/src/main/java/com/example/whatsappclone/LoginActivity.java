@@ -52,6 +52,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         txtSignUpActivity.setOnClickListener(LoginActivity.this);
 
 
+      /*  if(ParseUser.getCurrentUser() != null){
+            ParseUser.getCurrentUser().logOut();
+
+        }*/
     }
 
     @Override
@@ -64,43 +68,49 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             case R.id.btnLogin:
 
-                if(edtLoginEmail.getText().toString().equals("") ||
-                     edtLoginPassword.getText().toString().equals("")){
+                try {
+                    if(edtLoginEmail.getText().toString().equals("") ||
+                            edtLoginPassword.getText().toString().equals("")){
 
-                    FancyToast.makeText(LoginActivity.this,
-                            "Email, Password are required!",
-                            FancyToast.LENGTH_SHORT, FancyToast.ERROR,
-                            false).show();
-                }else{
+                        FancyToast.makeText(LoginActivity.this,
+                                "Email, Password are required!",
+                                FancyToast.LENGTH_SHORT, FancyToast.ERROR,
+                                false).show();
+                    }else{
 
-                    ParseUser appUser = new ParseUser();
-                    ProgressDialog progressDialog = new ProgressDialog(this);
-                    progressDialog.setMessage("Logging...");
-                    progressDialog.show();
-                    appUser.logInInBackground(edtLoginEmail.getText().toString(),
-                            edtLoginPassword.getText().toString(), new LogInCallback() {
-                                @Override
-                                public void done(ParseUser user, ParseException e) {
-                                    if(user != null && e == null){
-                                        FancyToast.makeText(LoginActivity.this,
-                                                user.getUsername() + " is logged in",
-                                                FancyToast.LENGTH_SHORT, FancyToast.SUCCESS,
-                                                false).show();
-                                        edtLoginEmail.setText("");
-                                        edtLoginPassword.setText("");
+                        ParseUser appUser = new ParseUser();
+                        ProgressDialog progressDialog = new ProgressDialog(this);
+                        progressDialog.setMessage("Logging...");
+                        progressDialog.show();
+                        appUser.logInInBackground(edtLoginEmail.getText().toString(),
+                                edtLoginPassword.getText().toString(), new LogInCallback() {
+                                    @Override
+                                    public void done(ParseUser user, ParseException e) {
+                                        if(user != null && e == null){
+                                            FancyToast.makeText(LoginActivity.this,
+                                                    user.getUsername() + " is logged in",
+                                                    FancyToast.LENGTH_SHORT, FancyToast.SUCCESS,
+                                                    false).show();
+                                            edtLoginEmail.setText("");
+                                            edtLoginPassword.setText("");
+                                            transitionToWhatsAppUsersActivity();
 
-                                    }else{
+                                        }else{
 
-                                        FancyToast.makeText(LoginActivity.this,
-                                                "there was an error " + e.getMessage(),
-                                                FancyToast.LENGTH_SHORT, FancyToast.ERROR,
-                                                false).show();
+                                            FancyToast.makeText(LoginActivity.this,
+                                                    "there was an error " + e.getMessage(),
+                                                    FancyToast.LENGTH_SHORT, FancyToast.ERROR,
+                                                    false).show();
+                                        }
+                                        progressDialog.dismiss();
                                     }
-                                    progressDialog.dismiss();
-                                }
-                            });
+                                });
+
+                    }
+                }catch (Exception e){
 
                 }
+
                 break;
 
             case R.id.rootLayout:
@@ -113,6 +123,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         InputMethodManager inputMethodManager = (InputMethodManager)
                 getSystemService(INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(),0);
+
+    }
+
+    private void transitionToWhatsAppUsersActivity(){
+        Intent intent = new Intent(LoginActivity.this, WhatsAppUsersActivity.class);
+        startActivity(intent);
 
     }
 }
